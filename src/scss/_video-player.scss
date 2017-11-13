@@ -1,0 +1,11 @@
+.video-player-wrapper {
+	@include media-breakpoint-down(xs) {
+		margin: 0 -30px;
+	}
+}
+
+.video-player {
+	> * {
+		background-color: #000;
+	}
+}

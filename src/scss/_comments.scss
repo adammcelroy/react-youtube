@@ -1,0 +1,99 @@
+.comments-wrapper {
+	padding: 30px 0 0 0;
+}
+
+.comments {
+}
+
+.comments__title-wrapper {
+	padding-bottom: 15px;
+}
+
+.comments__title {
+}
+
+.comment-wrapper {
+	padding-bottom: 15px;
+	
+	@include media-breakpoint-down(xs) {
+		padding-bottom: 25px;
+	}
+}
+
+.comment {
+}
+
+.comment__channel-wrapper {
+}
+
+.comment__channel {
+}
+
+.comment__channel__avatar-wrapper {
+	display: inline-block;
+	margin-right: 12px;
+}
+
+.comment__channel__avatar {
+	width: 28px;
+	height: 28px;
+	border-radius: 50px;
+}
+
+.comment__channel__name-wrapper {
+	display: inline-block;
+}
+
+.comment__channel__name {
+	font-weight: 700;
+	color: initial;
+}
+
+.comment__details-wrapper {
+	@include media-breakpoint-down(xs) {
+		padding: 0 0 5px 40px;
+	}
+}
+
+.comment__details {
+	text-align: right;
+	
+	@include media-breakpoint-down(xs) {
+		text-align: left;
+	}
+}
+
+.comment__details__item-wrapper {
+	display: inline-block;
+	
+	& + & {
+		margin-left: 15px;
+	}
+}
+
+.comment__details__item {
+	color: lighten($brand-black, 25%);
+	
+	.fa {
+		margin-right: 5px;
+	}
+}
+
+.comment__publish-date-wrapper {
+}
+
+.comment__publish-date {
+}
+
+.comment__like-count-wrapper {
+}
+
+.comment__like-count {
+}
+
+.comment__body-wrapper {
+	padding-left: 40px;
+}
+
+.comment__body {
+}

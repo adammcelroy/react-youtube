@@ -1,0 +1,27 @@
+.video-list-wrapper {
+
+}
+
+.video-list {
+	&.video-list--sidebar {
+		@include media-breakpoint-down(md) {
+			padding-top: 30px;
+		}
+	}
+}
+
+.video-list__videos-wrapper {
+
+}
+
+.video-list__videos {
+
+}
+
+.video-list__title-wrapper {
+	padding-bottom: 15px;
+}
+
+.video-list__title {
+
+}
