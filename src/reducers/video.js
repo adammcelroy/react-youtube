@@ -24,7 +24,7 @@ export default (state = INITIAL_STATE, action) => {
 			return {...state, related};
 		}
 		case GET_COMMENTS: {
-			const comments = action.payload.data.items.map(comment => standardiseCommentData(comment));
+			const comments = action.payload.data && action.payload.data.items.map(comment => standardiseCommentData(comment));
 
 			return {...state, comments};
 		}

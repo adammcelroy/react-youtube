@@ -21,45 +21,75 @@ export const formatNumber = (number, collapse, decimalPlaces) => {
 	});
 };
 
+export const getThumbnailUrl = (thumbnailsObj) => {
+	let thumbnail = '';
+
+	if (!thumbnailsObj) {
+		return thumbnail;
+	}
+
+	if (thumbnailsObj.standard) {
+		thumbnail = thumbnailsObj.standard.url;
+	} else if (thumbnailsObj.high) {
+		thumbnail = thumbnailsObj.high.url;
+	} else if (thumbnailsObj.medium) {
+		thumbnail = thumbnailsObj.medium.url;
+	}
+
+	return thumbnail;
+};
+
 export const standardiseVideoData = (video) => {
 	const { contentDetails } = video;
 	const duration = moment.duration(contentDetails ? contentDetails.duration : 0, 'seconds');
 	const format = duration._data.hours > 0 ? 'H:mm:ss' : 'm:ss';
 	const displayDuration = moment.utc(duration.as('milliseconds')).format(format);
-
-	let thumbnail = '';
-	if (video.snippet.thumbnails.standard) {
-		thumbnail = video.snippet.thumbnails.standard.url;
-	} else if (video.snippet.thumbnails.high) {
-		thumbnail = video.snippet.thumbnails.high.url;
-	}
+	const videoThumbnail = getThumbnailUrl(video.snippet.thumbnails);
 
 	return {
 		id: video.id,
 		title: video.snippet.title,
 		description: video.snippet.description,
-		publishedAt: video.snippet.publishedAt,
+		createdAt: video.snippet.publishedAt,
 		views: video.statistics.viewCount,
 		commentCount: video.statistics.commentCount,
 		likes: video.statistics.likeCount,
 		dislikes: video.statistics.dislikeCount,
 		duration: displayDuration,
+		thumbnail: videoThumbnail,
 		channel: {
 			id: video.snippet.channelId,
 			name: video.snippet.channelTitle,
 		},
-		thumbnail,
 	};
 };
 
-export const standardiseCommentData = (originalComment) => {
-	const comment = originalComment.snippet.topLevelComment.snippet;
+export const standardiseChannelData = (channel) => {
+	console.log(channel);
+	const channelAvatar = getThumbnailUrl(channel.snippet.thumbnails);
 
 	return {
-		id: originalComment.id,
+		id: channel.id,
+		name: channel.snippet.title,
+		description: channel.snippet.description,
+		createdDate: channel.snippet.publishedAt,
+		country: channel.snippet.country,
+		viewCount: channel.statistics.viewCount,
+		videoCount: channel.statistics.videoCount,
+		commentCount: channel.statistics.commentCount,
+		subscriberCount: channel.statistics.subscriberCount,
+		avatar: channelAvatar,
+	};
+};
+
+export const standardiseCommentData = (commentObj) => {
+	const comment = commentObj.snippet.topLevelComment.snippet;
+
+	return {
+		id: commentObj.id,
 		text: comment.textOriginal,
 		likeCount: comment.likeCount,
-		publishedAt: comment.publishedAt,
+		createdAt: comment.publishedAt,
 		channel: {
 			id: comment.authorChannelId.value,
 			name: comment.authorDisplayName,

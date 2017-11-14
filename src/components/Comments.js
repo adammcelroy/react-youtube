@@ -43,10 +43,10 @@ class Comments extends Component {
 								<div className="comment__details">
 									<div className="comment__details__item-wrapper">
 										<div className="comment__details__item">
-											<div className="comment__publish-date-wrapper">
-												<div className="comment__publish-date">
+											<div className="comment__created-date-wrapper">
+												<div className="comment__created-date">
 													<Moment fromNow>
-														{comment.publishedAt}
+														{comment.createdAt}
 													</Moment>
 												</div>
 											</div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import Linkify from 'react-linkify';
 import queryString from 'query-string';
@@ -9,6 +10,7 @@ import VideoList from './VideoList';
 import Comments from './Comments';
 import {
 	getVideo,
+	getChannel,
 	getRelatedVideos,
 	getComments,
 } from '../actions';
@@ -41,6 +43,7 @@ class Video extends Component {
 	getVideo(id) {
 		const {
 			getVideo,
+			getChannel,
 			getRelatedVideos,
 			getComments,
 		} = this.props;
@@ -49,6 +52,7 @@ class Video extends Component {
 
 		getVideo(id).then(() => {
 			setPageTitle(this.props.video.title);
+			getChannel(this.props.video.channel.id);
 			getRelatedVideos(id);
 			getComments(id);
 		});
@@ -56,9 +60,9 @@ class Video extends Component {
 
 	render() {
 		const { id } = this.state;
-		const { video } = this.props;
+		const { video, channel } = this.props;
 
-		return (
+		return video.id ? (
 			<div className="video-wrapper">
 				<div className="video">
 					<div className="container">
@@ -75,21 +79,11 @@ class Video extends Component {
 								<div className="video__stats-wrapper">
 									<div className="video__stats">
 										<div className="row">
-											<div className="col-md-4 col-sm-5 text-left">
+											<div className="col-6 text-left">
 												{formatNumber(video.views)} views
 											</div>
 
-											<div className="col-md-8 col-sm-7">
-												<div className="video__stats__item">
-													<span className="d-none d-md-inline-block">
-														Published
-													</span>
-
-													<Moment format=" MMM DD, YYYY">
-														{video.publishedAt}
-													</Moment>
-												</div>
-
+											<div className="col-6">
 												<div className="video__stats__item">
 													<i className="fa fa-thumbs-up"></i>
 													{formatNumber(video.likes, true)}
@@ -98,6 +92,39 @@ class Video extends Component {
 												<div className="video__stats__item">
 													<i className="fa fa-thumbs-down"></i>
 													{formatNumber(video.dislikes, true)}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div className="video__channel-wrapper">
+									<div className="video__channel">
+										<Link
+											to={`/channel/${channel.id}`}
+											className="video__channel__avatar-wrapper"
+										>
+											<img
+												src={channel.avatar}
+												alt={channel.name}
+												className="video__channel__avatar"
+											/>
+										</Link>
+
+										<div className="video__channel__name-wrapper">
+											<Link
+												to={`/channel/${channel.id}`}
+												className="video__channel__name"
+											>
+												{channel.name}
+											</Link>
+
+											<div className="video__created-date-wrapper">
+												<div className="video__created-date">
+													Published
+													<Moment format=" MMM DD, YYYY">
+														{video.createdAt}
+													</Moment>
 												</div>
 											</div>
 										</div>
@@ -141,18 +168,20 @@ class Video extends Component {
 					</div>
 				</div>
 			</div>
-		);
+		) : <div></div>;
 	}
 }
 
 const mapStateToProps = (state) => {
 	return {
 		video: state.video,
+		channel: state.channel,
 	};
 };
 
 export default connect(mapStateToProps, {
 	getVideo,
+	getChannel,
 	getRelatedVideos,
 	getComments,
 })(Video);

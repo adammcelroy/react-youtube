@@ -1,8 +1,8 @@
-// Video
 export const GET_VIDEO = 'GET_VIDEO';
 export const GET_RELATED_VIDEOS = 'GET_RELATED_VIDEOS';
 export const GET_COMMENTS = 'GET_COMMENTS';
 
-// Videos
 export const GET_POPULAR_VIDEOS = 'GET_POPULAR_VIDEOS';
 export const GET_VIDEOS_FOR_SEARCH = 'GET_VIDEOS_FOR_SEARCH';
+
+export const GET_CHANNEL = 'GET_CHANNEL';

@@ -102,10 +102,10 @@ class VideoList extends Component {
 											</div>
 											}
 
-											{video.publishedAt &&
+											{video.createdDate &&
 											<div className="video-listing__stats__item">
 												<Moment fromNow>
-													{video.publishedAt}
+													{video.createdDate}
 												</Moment>
 											</div>
 											}
