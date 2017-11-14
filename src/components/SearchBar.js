@@ -17,7 +17,7 @@ class SearchBar extends Component {
 		super(props);
 
 		this.state = {
-			query: queryString.parse(props.location.search).query || '',
+			query: queryString.parse(props.location.search).search_query || '',
 			showSuggestions: false,
 			suggestions: [],
 		};
@@ -90,9 +90,11 @@ class SearchBar extends Component {
 		event.preventDefault();
 
 		if (this.state.query) {
+			const query = decodeURI(this.state.query).replace(/ /g, '+');
+
 			this.props.history.push({
-				pathname: '/search',
-				search: `?query=${this.state.query}`,
+				pathname: '/results',
+				search: `?search_query=${query}`,
 			});
 
 			this.refs.searchBar.blur();
@@ -105,7 +107,7 @@ class SearchBar extends Component {
 			showSuggestions,
 			suggestions,
 		} = this.state;
-
+		
 		const { autofocus } = this.props;
 
 		return (

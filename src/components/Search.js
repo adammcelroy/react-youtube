@@ -12,14 +12,14 @@ class Search extends Component {
 	}
 
 	componentWillMount() {
-		const initialQuery = queryString.parse(this.props.location.search).query;
+		const initialQuery = queryString.parse(this.props.location.search).search_query;
 
 		this.getVideos(initialQuery);
 	}
 
 	componentWillReceiveProps(nextProps) {
 		const oldQuery = this.state.query;
-		const newQuery = queryString.parse(nextProps.location.search).query;
+		const newQuery = queryString.parse(nextProps.location.search).search_query;
 
 		if (newQuery !== oldQuery) {
 			this.getVideos(newQuery);
