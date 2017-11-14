@@ -5,22 +5,16 @@ export const setPageTitle = (title) => {
 };
 
 export const formatNumber = (number, collapse, decimalPlaces) => {
-	// Billion (BN)
 	if (collapse && number > 999999999) {
-		return `${(number / 1000000000).toFixed(decimalPlaces || 0)}BN`;
+		return `${(number / 1000000000).toFixed(decimalPlaces || 1)}BN`;
 	}
-
-	// Million (M)
 	if (collapse && number > 999999) {
 		return `${(number / 1000000).toFixed(decimalPlaces || 0)}M`;
 	}
-
-	// Thousand (K)
 	if (collapse && number > 999) {
 		return `${(number / 1000).toFixed(decimalPlaces || 0)}K`;
 	}
-
-	// Otherwise, commas and decimals
+	
 	return Number(number).toLocaleString(undefined, {
 		minimumFractionDigits: decimalPlaces || 0,
 		maximumFractionDigits: decimalPlaces || 0,
