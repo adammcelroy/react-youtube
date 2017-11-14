@@ -48,7 +48,7 @@ class VideoList extends Component {
 					<div className="video-listing">
 						<div className="row">
 							<div className={innerColumnClasses}>
-								<Link to={`/video/${video.id}`}>
+								<Link to={`/watch?v=${video.id}`}>
 									<div className="video-listing__thumbnail-wrapper">
 										<img
 											src={video.thumbnail}
@@ -68,7 +68,7 @@ class VideoList extends Component {
 							</div>
 
 							<div className="col">
-								<Link to={`/video/${video.id}`}>
+								<Link to={`/watch?v=${video.id}`}>
 									<div className="video-listing__title-wrapper">
 										<h1
 											className="video-listing__title"
@@ -93,7 +93,7 @@ class VideoList extends Component {
 									</Link>
 								</div>
 
-								<Link to={`/video/${video.id}`}>
+								<Link to={`/watch?v=${video.id}`}>
 									<div className="video-listing__stats-wrapper">
 										<div className="video-listing__stats">
 											{video.views &&

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import Linkify from 'react-linkify';
+import queryString from 'query-string';
 import Truncate from './Truncate';
 import VideoPlayer from './VideoPlayer';
 import VideoList from './VideoList';
@@ -17,15 +18,20 @@ import {
 } from '../utilities';
 
 class Video extends Component {
-	componentWillMount() {
-		const { id } = this.props.match.params;
+	constructor() {
+		super();
+		this.state = {id: ''};
+	}
 
-		this.getVideo(id);
+	componentWillMount() {
+		const initialId = queryString.parse(this.props.location.search).v;
+
+		this.getVideo(initialId);
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const oldId = this.props.match.params.id;
-		const newId = nextProps.match.params.id;
+		const oldId = this.state.id;
+		const newId = queryString.parse(nextProps.location.search).v;
 
 		if (newId !== oldId) {
 			this.getVideo(newId);
@@ -39,6 +45,8 @@ class Video extends Component {
 			getComments,
 		} = this.props;
 
+		this.setState({id});
+
 		getVideo(id).then(() => {
 			setPageTitle(this.props.video.snippet.title);
 			getRelatedVideos(id);
@@ -47,7 +55,7 @@ class Video extends Component {
 	}
 
 	render() {
-		const { id } = this.props.match.params;
+		const { id } = this.state;
 		const {
 			video: {
 				snippet,

@@ -102,13 +102,12 @@ class SearchBar extends Component {
 	}
 
 	render() {
+		const { autofocus } = this.props;
 		const {
 			query,
 			showSuggestions,
 			suggestions,
 		} = this.state;
-		
-		const { autofocus } = this.props;
 
 		return (
 			<div role="search" className="search-bar-wrapper">

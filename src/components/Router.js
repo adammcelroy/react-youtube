@@ -19,7 +19,7 @@ export default () => {
 					<Route exact strict path="/" component={Home} />
 					<Route exact strict path="/results" component={Search} />
 					<Route exact strict path="/channel/:id" component={Channel} />
-					<Route exact strict path="/video/:id" component={Video} />
+					<Route exact strict path="/watch" component={Video} />
 					<Redirect to="/" />
 				</Switch>
 			</App>
