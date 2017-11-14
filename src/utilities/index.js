@@ -14,7 +14,7 @@ export const formatNumber = (number, collapse, decimalPlaces) => {
 	if (collapse && number > 999) {
 		return `${(number / 1000).toFixed(decimalPlaces || 0)}K`;
 	}
-	
+
 	return Number(number).toLocaleString(undefined, {
 		minimumFractionDigits: decimalPlaces || 0,
 		maximumFractionDigits: decimalPlaces || 0,
@@ -22,7 +22,8 @@ export const formatNumber = (number, collapse, decimalPlaces) => {
 };
 
 export const standardiseVideoData = (video) => {
-	let duration = moment.duration(video.contentDetails.duration, 'seconds');
+	const { contentDetails } = video;
+	const duration = moment.duration(contentDetails ? contentDetails.duration : 0, 'seconds');
 	const format = duration._data.hours > 0 ? 'H:mm:ss' : 'm:ss';
 	const displayDuration = moment.utc(duration.as('milliseconds')).format(format);
 
@@ -39,6 +40,9 @@ export const standardiseVideoData = (video) => {
 		description: video.snippet.description,
 		publishedAt: video.snippet.publishedAt,
 		views: video.statistics.viewCount,
+		commentCount: video.statistics.commentCount,
+		likes: video.statistics.likeCount,
+		dislikes: video.statistics.dislikeCount,
 		duration: displayDuration,
 		channel: {
 			id: video.snippet.channelId,

@@ -14,7 +14,11 @@ class VideoPlayer extends Component {
 	};
 
 	render() {
-		const { id, autoplay, showRelated } = this.props;
+		const {
+			id,
+			autoplay,
+			showRelated,
+		} = this.props;
 
 		const params = [
 			`autoplay=${Number(autoplay)}`,

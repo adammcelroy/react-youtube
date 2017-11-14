@@ -48,7 +48,7 @@ class Video extends Component {
 		this.setState({id});
 
 		getVideo(id).then(() => {
-			setPageTitle(this.props.video.snippet.title);
+			setPageTitle(this.props.video.title);
 			getRelatedVideos(id);
 			getComments(id);
 		});
@@ -56,14 +56,7 @@ class Video extends Component {
 
 	render() {
 		const { id } = this.state;
-		const {
-			video: {
-				snippet,
-				statistics,
-				related,
-				comments,
-			},
-		} = this.props;
+		const { video } = this.props;
 
 		return (
 			<div className="video-wrapper">
@@ -71,14 +64,11 @@ class Video extends Component {
 					<div className="container">
 						<div className="row">
 							<div className="col-lg-8">
-								<VideoPlayer
-									id={id}
-									autoplay={false} // eventually true
-								/>
+								<VideoPlayer id={id} />
 
 								<div className="video__title-wrapper">
 									<h1 className="h4 video__title">
-										{snippet.title}
+										{video.title}
 									</h1>
 								</div>
 
@@ -86,7 +76,7 @@ class Video extends Component {
 									<div className="video__stats">
 										<div className="row">
 											<div className="col-md-4 col-sm-5 text-left">
-												{formatNumber(statistics.viewCount)} views
+												{formatNumber(video.views)} views
 											</div>
 
 											<div className="col-md-8 col-sm-7">
@@ -96,40 +86,40 @@ class Video extends Component {
 													</span>
 
 													<Moment format=" MMM DD, YYYY">
-														{snippet.publishedAt}
+														{video.publishedAt}
 													</Moment>
 												</div>
 
 												<div className="video__stats__item">
 													<i className="fa fa-thumbs-up"></i>
-													{formatNumber(statistics.likeCount, true)}
+													{formatNumber(video.likes, true)}
 												</div>
 
 												<div className="video__stats__item">
 													<i className="fa fa-thumbs-down"></i>
-													{formatNumber(statistics.dislikeCount, true)}
+													{formatNumber(video.dislikes, true)}
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 
-								{snippet.description &&
+								{video.description &&
 									<div className="video__description-wrapper">
 										<div className="video__description">
 											<Linkify properties={{target: '_blank'}}>
 												<Truncate lines={3}>
-													{snippet.description}
+													{video.description}
 												</Truncate>
 											</Linkify>
 										</div>
 									</div>
 								}
 
-								{comments && comments.length > 0 &&
+								{video.comments && video.comments.length > 0 &&
 									<Comments
-										comments={comments}
-										totalCount={statistics.commentCount}
+										comments={video.comments}
+										totalCount={video.commentCount}
 									/>
 								}
 							</div>
@@ -137,9 +127,9 @@ class Video extends Component {
 							<div className="col-lg-4">
 								<div className="video__related-wrapper">
 									<div className="video__related">
-										{related && related.length > 0 &&
+										{video.related && video.related.length > 0 &&
 											<VideoList
-												videos={related}
+												videos={video.related}
 												title="Related Videos"
 												layout="sidebar"
 											/>

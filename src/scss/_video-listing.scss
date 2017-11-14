@@ -39,6 +39,7 @@
 .video-listing__thumbnail {
 	width: 100%;
 	margin: -10% 0;
+	pointer-events: none;
 }
 
 .video-listing__duration-wrapper {
