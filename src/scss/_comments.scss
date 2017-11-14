@@ -96,4 +96,12 @@
 }
 
 .comment__body {
+	.truncate-trigger {
+		font-weight: 700;
+		color: initial;
+		
+		&:hover, &:focus, &:active {
+			text-decoration: none;
+		}
+	}
 }

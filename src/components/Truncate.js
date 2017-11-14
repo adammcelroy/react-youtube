@@ -35,7 +35,6 @@ class Truncate extends Component {
 
 	toggleLines(event) {
 		event.preventDefault();
-
 		this.setState({expanded: !this.state.expanded});
 	}
 
@@ -56,15 +55,20 @@ class Truncate extends Component {
 			<div>
 				<TruncateLibrary
 					lines={!expanded && lines}
+					onTruncate={this.handleTruncate}
 					ellipsis={more && (more === '...') ? '…' : (
 						<span>
+							…
 							<br />
-							<a href="" className="truncate-trigger" onClick={this.toggleLines}>
+							<a
+								href=""
+								className="truncate-trigger"
+								onClick={this.toggleLines}
+							>
 								{more}
 							</a>
 						</span>
 					)}
-					onTruncate={this.handleTruncate}
 				>
 					{children}
 				</TruncateLibrary>
@@ -72,7 +76,11 @@ class Truncate extends Component {
 				{!truncated && expanded && (
 					<span>
 						<br />
-						<a href="" className="truncate-trigger" onClick={this.toggleLines}>
+						<a
+							href=""
+							className="truncate-trigger"
+							onClick={this.toggleLines}
+						>
 							{less}
 						</a>
 					</span>

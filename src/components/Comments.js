@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
+import Truncate from './Truncate';
 import { formatNumber } from '../utilities';
 
 class Comments extends Component {
@@ -69,7 +70,9 @@ class Comments extends Component {
 
 					<div className="comment__body-wrapper">
 						<div className="comment__body">
-							{comment.text}
+							<Truncate lines={4} more="Read more">
+								{comment.text}
+							</Truncate>
 						</div>
 					</div>
 				</div>
