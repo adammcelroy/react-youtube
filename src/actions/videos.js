@@ -29,7 +29,7 @@ export const _getMissingVideoData = (videosData) => {
 	});
 };
 
-export const getPopularVideos = (pageToken) => {
+export const getPopularVideos = (nextPageToken) => {
 	const request = axios.get(`${API_URL}/videos`, {
 		params: {
 			key: API_KEY,
@@ -38,7 +38,7 @@ export const getPopularVideos = (pageToken) => {
 			videoCategoryId: '',
 			maxResults: 24,
 			part: 'snippet, statistics, contentDetails',
-			pageToken,
+			pageToken: nextPageToken,
 		},
 	});
 
@@ -48,20 +48,23 @@ export const getPopularVideos = (pageToken) => {
 	};
 };
 
-export const getVideosForSearch = (query, pageToken) => {
-	const videoPromise = axios.get(`${API_URL}/search`, {
-		params: {
-			key: API_KEY,
-			q: query,
-			type: 'video',
-			part: 'snippet',
-			maxResults: 12,
-			pageToken,
-		},
-	}).then(_getMissingVideoData);
+export const getVideosForSearch = (query, nextPageToken) => {
+	const continuedResults = nextPageToken !== undefined;
+
+	const params = {
+		key: API_KEY,
+		q: query,
+		type: 'video',
+		part: 'snippet',
+		maxResults: 12,
+		pageToken: nextPageToken,
+	};
+
+	const videoPromise = axios.get(`${API_URL}/search`, {params}).then(_getMissingVideoData);
 
 	return {
 		type: GET_VIDEOS_FOR_SEARCH,
 		payload: videoPromise,
+		meta: {continuedResults},
 	};
 };

@@ -65,7 +65,6 @@ export const standardiseVideoData = (video) => {
 };
 
 export const standardiseChannelData = (channel) => {
-	console.log(channel);
 	const channelAvatar = getThumbnailUrl(channel.snippet.thumbnails);
 
 	return {
@@ -96,4 +95,9 @@ export const standardiseCommentData = (commentObj) => {
 			avatar: comment.authorProfileImageUrl,
 		},
 	};
+};
+
+export const scrollToTop = () => {
+	document.body.scrollTop = document.documentElement.scrollTop = 0;
+	return true;
 };

@@ -7,6 +7,10 @@ import { standardiseVideoData } from '../utilities';
 const INITIAL_STATE = {
 	popular: [],
 	search: [],
+	current: {
+		totalResults: 0,
+		nextPageToken: '',
+	},
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -18,10 +22,25 @@ export default (state = INITIAL_STATE, action) => {
 			};
 		}
 		case GET_VIDEOS_FOR_SEARCH: {
-			return {
+			const videos = action.payload.data.items.map(
+				video => standardiseVideoData(video)
+			);
+
+			const newState = {
 				...state,
-				search: action.payload.data.items.map(video => standardiseVideoData(video)),
+				current: {
+					nextPageToken: action.payload.data.nextPageToken,
+					totalResults: action.payload.data.pageInfo.totalResults,
+				},
 			};
+
+			if (action.meta.continuedResults) {
+				newState.search = [...newState.search, ...videos];
+			} else {
+				newState.search = videos;
+			}
+
+			return newState;
 		}
 		default:
 			return state;

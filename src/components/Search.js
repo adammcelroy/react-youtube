@@ -1,50 +1,76 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
+import InfiniteScroll from 'react-infinite-scroller';
 import VideoList from './VideoList';
 import { getVideosForSearch } from '../actions';
-import { setPageTitle } from '../utilities';
+import {
+	setPageTitle,
+	formatNumber,
+	scrollToTop,
+} from '../utilities';
 
 class Search extends Component {
 	constructor() {
 		super();
-		this.state = {query: ''};
+
+		this.state = {
+			query: '',
+			title: '',
+		};
+
+		this.getVideos = this.getVideos.bind(this);
 	}
 
 	componentWillMount() {
-		const initialQuery = queryString.parse(this.props.location.search).search_query;
+		const query = queryString.parse(this.props.location.search).search_query;
 
-		this.getVideos(initialQuery);
+		setPageTitle(query);
+		this.setState({query});
+		this.getVideos(query);
 	}
 
 	componentWillReceiveProps(nextProps) {
+		const query = queryString.parse(nextProps.location.search).search_query;
 		const oldQuery = this.state.query;
-		const newQuery = queryString.parse(nextProps.location.search).search_query;
 
-		if (newQuery !== oldQuery) {
-			this.getVideos(newQuery);
+		if (query !== oldQuery) {
+			setPageTitle(query);
+			this.setState({query});
+			this.getVideos(query);
 		}
 	}
 
-	getVideos(query) {
-		this.setState({query});
-		setPageTitle(query);
-		this.props.getVideosForSearch(query);
+	getVideos(query, isPaginatedRequest) {
+		if (!isPaginatedRequest) {
+			scrollToTop();
+		}
+
+		this.props.getVideosForSearch(query, isPaginatedRequest ? this.props.nextPageToken : undefined);
 	}
 
 	render() {
-		const { videos } = this.props;
+		const { query } = this.state;
+		const { videos, totalResults } = this.props;
+		const title = `${query} (${formatNumber(totalResults)} results)`;
 
 		return (
 			<div className="search-wrapper">
 				<div className="search">
 					<div className="container">
-						<VideoList
-							videos={videos}
-							title={`Search: ${this.state.query}`}
-							layout="list"
-							showDescriptions={true}
-						/>
+						<InfiniteScroll
+							pageStart={0}
+							hasMore={true}
+							loadMore={page => page > 1 && this.getVideos(query, true)}
+							loader={<div className="loader">Loading...</div>}
+						>
+							<VideoList
+								videos={videos}
+								title={title}
+								layout="list"
+								showDescriptions={true}
+							/>
+						</InfiniteScroll>
 					</div>
 				</div>
 			</div>
@@ -55,6 +81,8 @@ class Search extends Component {
 const mapStateToProps = (state) => {
 	return {
 		videos: state.videos.search,
+		nextPageToken: state.videos.current.nextPageToken,
+		totalResults: state.videos.current.totalResults,
 	};
 };
 
