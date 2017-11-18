@@ -10,8 +10,8 @@ import VideoList from './VideoList';
 import Comments from './Comments';
 import {
 	getVideo,
+	getVideos,
 	getChannel,
-	getRelatedVideos,
 	getComments,
 } from '../actions';
 import {
@@ -43,8 +43,8 @@ class Video extends Component {
 	getVideo(id) {
 		const {
 			getVideo,
+			getVideos,
 			getChannel,
-			getRelatedVideos,
 			getComments,
 		} = this.props;
 
@@ -53,8 +53,11 @@ class Video extends Component {
 		getVideo(id).then(() => {
 			setPageTitle(this.props.video.title);
 			getChannel(this.props.video.channel.id);
-			getRelatedVideos(id);
 			getComments(id);
+			getVideos({
+				type: 'related',
+				videoId: id,
+			});
 		});
 	}
 
@@ -181,7 +184,7 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
 	getVideo,
+	getVideos,
 	getChannel,
-	getRelatedVideos,
 	getComments,
 })(Video);

@@ -1,14 +1,11 @@
 import axios from 'axios';
 import _ from 'lodash';
 import { API_URL, API_KEY } from './config';
-import {
-	GET_POPULAR_VIDEOS,
-	GET_VIDEOS_FOR_SEARCH,
-} from './types';
+import { GET_POPULAR_VIDEOS, GET_VIDEOS_FOR_SEARCH, GET_RELATED_VIDEOS } from './types';
 
-export const _getMissingVideoData = (videosData) => {
+export const getAdditionalVideoData = (videosData) => {
 	const videos = videosData.data.items;
-	const ids = videos.map(video => video.id.videoId).join(',');
+	const ids = videos.map(video => video.id.videoId || video.id).join(',');
 
 	return axios.get(`${API_URL}/videos`, {
 		params: {
@@ -16,55 +13,74 @@ export const _getMissingVideoData = (videosData) => {
 			id: ids,
 			part: 'statistics, contentDetails',
 		},
-	}).then((missingData) => {
-		const parts = missingData.data.items;
-
-		// Merge missing data into the video results
-		const combined = _.map(videos, video => _.assign(video, _.find(parts, {id: video.id.videoId})));
-
-		// Update the return data
-		videosData.data.items = combined;
-
-		return videosData;
-	});
+	}).then((additionalData) => ({
+		...videosData,
+		data: {
+			...videosData.data,
+			items: _.map(videos, (video) => {
+				const id = video.id.videoId || video.id;
+				return _.assign(video, _.find(additionalData.data.items, {id}))
+			}),
+		}
+	}));
 };
 
-export const getPopularVideos = (nextPageToken) => {
-	const request = axios.get(`${API_URL}/videos`, {
-		params: {
-			key: API_KEY,
-			chart: 'mostPopular',
-			regionCode: 'US',
-			videoCategoryId: '',
-			maxResults: 24,
-			part: 'snippet, statistics, contentDetails',
-			pageToken: nextPageToken,
-		},
-	});
-
-	return {
-		type: GET_POPULAR_VIDEOS,
-		payload: request,
-	};
-};
-
-export const getVideosForSearch = (query, nextPageToken) => {
-	const continuedResults = nextPageToken !== undefined;
-
-	const params = {
+export const getVideos = (config = {type: 'popular'}) => {
+	let endpoint, type, requiresAdditionalVideoData;
+	let params = {
 		key: API_KEY,
-		q: query,
-		type: 'video',
-		part: 'snippet',
 		maxResults: 12,
-		pageToken: nextPageToken,
+		part: 'snippet',
 	};
 
-	const videoPromise = axios.get(`${API_URL}/search`, {params}).then(_getMissingVideoData);
+	if (config.next) {
+		params.pageToken = config.next;
+	}
 
-	return {
-		type: GET_VIDEOS_FOR_SEARCH,
-		payload: videoPromise,
-		meta: {continuedResults},
-	};
+	switch (config.type) {
+		case 'popular': {
+			type = GET_POPULAR_VIDEOS;
+			endpoint = 'videos';
+
+			params = {
+				...params,
+				chart: 'mostPopular',
+				part: 'snippet, statistics, contentDetails',
+				regionCode: 'US',
+				videoCategoryId: '',
+			};
+			break;
+		}
+		case 'search': {
+			type = GET_VIDEOS_FOR_SEARCH;
+			endpoint = 'search';
+			requiresAdditionalVideoData = true;
+
+			params = {
+				...params,
+				q: config.query,
+				type: 'video',
+			};
+			break;
+		}
+		case 'related': {
+			type = GET_RELATED_VIDEOS;
+			endpoint = 'search';
+			requiresAdditionalVideoData = true;
+
+			params = {
+				...params,
+				relatedToVideoId: config.videoId,
+				type: 'video',
+			};
+			break;
+		}
+		default: return;
+	}
+
+	const payload = axios.get(`${API_URL}/${endpoint}`, {params}).then(
+		data => requiresAdditionalVideoData ? getAdditionalVideoData(data) : data
+	);
+
+	return {type, payload};
 };

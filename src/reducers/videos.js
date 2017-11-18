@@ -1,7 +1,4 @@
-import {
-	GET_POPULAR_VIDEOS,
-	GET_VIDEOS_FOR_SEARCH,
-} from '../actions/types';
+import { GET_POPULAR_VIDEOS, GET_VIDEOS_FOR_SEARCH } from '../actions/types';
 import { standardiseVideoData } from '../utilities';
 
 const INITIAL_STATE = {
@@ -15,16 +12,13 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case GET_POPULAR_VIDEOS: {
+		case GET_POPULAR_VIDEOS:
 			return {
 				...state,
-				popular: action.payload.data.items.map(video => standardiseVideoData(video)),
+				popular: action.payload.data.items.map(v => standardiseVideoData(v)),
 			};
-		}
 		case GET_VIDEOS_FOR_SEARCH: {
-			const videos = action.payload.data.items.map(
-				video => standardiseVideoData(video)
-			);
+			const videos = action.payload.data.items.map(v => standardiseVideoData(v));
 
 			const newState = {
 				...state,
@@ -34,7 +28,7 @@ export default (state = INITIAL_STATE, action) => {
 				},
 			};
 
-			if (action.meta.continuedResults) {
+			if (action.payload.data.prevPageToken) {
 				newState.search = [...newState.search, ...videos];
 			} else {
 				newState.search = videos;
@@ -42,7 +36,6 @@ export default (state = INITIAL_STATE, action) => {
 
 			return newState;
 		}
-		default:
-			return state;
+		default: return state;
 	}
 };

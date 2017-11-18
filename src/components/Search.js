@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import queryString from 'query-string';
 import InfiniteScroll from 'react-infinite-scroller';
 import VideoList from './VideoList';
-import { getVideosForSearch } from '../actions';
+import { getVideos } from '../actions';
 import {
 	setPageTitle,
 	formatNumber,
@@ -46,7 +46,11 @@ class Search extends Component {
 			scrollToTop();
 		}
 
-		this.props.getVideosForSearch(query, isPaginatedRequest ? this.props.nextPageToken : undefined);
+		this.props.getVideos({
+			query,
+			type: 'search',
+			next: isPaginatedRequest && this.props.nextPageToken,
+		});
 	}
 
 	render() {
@@ -86,6 +90,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, {
-	getVideosForSearch,
-})(Search);
+export default connect(mapStateToProps, {getVideos})(Search);

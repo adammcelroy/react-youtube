@@ -1,14 +1,10 @@
 import { GET_CHANNEL } from '../actions/types';
 import { standardiseChannelData } from '../utilities';
 
-const INITIAL_STATE = {};
-
-export default (state = INITIAL_STATE, action) => {
+export default (state = {}, action) => {
 	switch (action.type) {
-		case GET_CHANNEL: {
+		case GET_CHANNEL:
 			return standardiseChannelData(action.payload.data.items[0]);
-		}
-		default:
-			return state;
+		default: return state;
 	}
 };
