@@ -4,11 +4,14 @@ import VideoList from './VideoList';
 import { getVideos } from '../actions';
 import { setPageTitle } from '../utilities';
 
-class Home extends Component {
+export class Home extends Component {
 	componentWillMount() {
-		setPageTitle();
-
+		this.setPageTitle();
 		this.props.getVideos();
+	}
+
+	setPageTitle(title) {
+		setPageTitle(title)
 	}
 
 	render() {
@@ -27,4 +30,7 @@ class Home extends Component {
 	}
 }
 
-export default connect(state => ({videos: state.videos.popular}), {getVideos})(Home);
+export const mapStateToProps = state => ({videos: state.videos.popular});
+export const mapDispatchToProps = () => ({getVideos});
+
+export default connect(state => mapStateToProps, mapDispatchToProps)(Home);

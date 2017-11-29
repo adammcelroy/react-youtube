@@ -19,7 +19,7 @@ export const getAdditionalVideoData = (videosData) => {
 			...videosData.data,
 			items: _.map(videos, (video) => {
 				const id = video.id.videoId || video.id;
-				return _.assign(video, _.find(additionalData.data.items, {id}))
+				return _.assign(video, _.find(additionalData.data.items, {id}));
 			}),
 		}
 	}));

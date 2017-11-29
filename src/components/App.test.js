@@ -3,23 +3,27 @@ import { shallow } from 'enzyme';
 import App from './App';
 import Header from './Header';
 
+let component;
+
 describe('<App />', () => {
-	it('should render without crashing', () => {
-		shallow(<App />);
+	beforeEach(() => {
+		component = shallow(<App />);
 	});
 
-	it('should render div with class name "app"', () => {
-		const wrapper = shallow(<App />);
-		expect(wrapper.find('div.app')).toHaveLength(1)
+	it('should render without crashing', () => {
+		expect(component).toHaveLength(1);
+	});
+
+	it('should render div with class "app"', () => {
+		expect(component.find('div.app')).toHaveLength(1)
 	});
 
 	it('should render Header component', () => {
-		const wrapper = shallow(<App />);
-		expect(wrapper.find(Header)).toHaveLength(1);
+		expect(component.find(Header)).toHaveLength(1);
 	});
 
 	it('should render children', () => {
-		const wrapper = shallow(<App><div className="child" /></App>);
-		expect(wrapper.find('div.child')).toHaveLength(1);
+		const component = shallow(<App><div className="child" /></App>);
+		expect(component.find('div.child')).toHaveLength(1);
 	});
 });
