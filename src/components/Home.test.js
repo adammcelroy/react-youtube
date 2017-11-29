@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { Home, mapStateToProps } from './Home';
 import VideoList from './VideoList';
 
-let component, props,;
+let component, props;
 
 const createShallow = () => {
 	props = {
