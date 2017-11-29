@@ -21,9 +21,7 @@ class Header extends Component {
 							<div className="col-lg-7 col-md-8 col-10">
 								<div className="header__search-wrapper">
 									<div className="header__search">
-										<SearchBar
-											autofocus={true}
-										/>
+										<SearchBar autofocus={true} />
 									</div>
 								</div>
 							</div>
