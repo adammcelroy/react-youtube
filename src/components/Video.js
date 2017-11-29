@@ -103,24 +103,18 @@ class Video extends Component {
 
 								<div className="video__channel-wrapper">
 									<div className="video__channel">
-										<Link
-											to={`/channel/${channel.id}`}
-											className="video__channel__avatar-wrapper"
-										>
+										<span className="video__channel__avatar-wrapper">
 											<img
 												src={channel.avatar}
 												alt={channel.name}
 												className="video__channel__avatar"
 											/>
-										</Link>
+										</span>
 
 										<div className="video__channel__name-wrapper">
-											<Link
-												to={`/channel/${channel.id}`}
-												className="video__channel__name"
-											>
+											<span className="video__channel__name">
 												{channel.name}
-											</Link>
+											</span>
 
 											<div className="video__created-date-wrapper">
 												<div className="video__created-date">

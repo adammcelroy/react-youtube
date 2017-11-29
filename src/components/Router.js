@@ -8,7 +8,6 @@ import {
 import App from './App';
 import Home from './Home';
 import Search from './Search';
-import Channel from './Channel';
 import Video from './Video';
 
 export default () => {
@@ -18,7 +17,6 @@ export default () => {
 				<Switch>
 					<Route exact strict path="/" component={Home} />
 					<Route exact strict path="/results" component={Search} />
-					<Route exact strict path="/channel/:id" component={Channel} />
 					<Route exact strict path="/watch" component={Video} />
 					<Redirect to="/" />
 				</Switch>

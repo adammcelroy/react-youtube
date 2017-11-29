@@ -82,15 +82,14 @@ class VideoList extends Component {
 								</Link>
 
 								<div className="video-listing__channel-wrapper">
-									<Link
-										to={`/channel/${video.channel.id}`}
+									<span
 										className="video-listing__channel"
 										title={video.channel.name}
 									>
 										<Truncate lines={1} more="...">
 											{video.channel.name}
 										</Truncate>
-									</Link>
+									</span>
 								</div>
 
 								<Link to={`/watch?v=${video.id}`}>

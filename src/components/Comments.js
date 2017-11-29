@@ -18,23 +18,21 @@ class Comments extends Component {
 					<div className="row">
 						<div className="col-sm-6">
 							<div className="comment__channel-wrapper">
-								<Link to={`/channel/${comment.channel.id}`}>
-									<div className="comment__channel">
-										<div className="comment__channel__avatar-wrapper">
-											<img
-												src={comment.channel.avatar}
-												alt={comment.channel.name}
-												className="comment__channel__avatar"
-											/>
-										</div>
+								<div className="comment__channel">
+									<div className="comment__channel__avatar-wrapper">
+										<img
+											src={comment.channel.avatar}
+											alt={comment.channel.name}
+											className="comment__channel__avatar"
+										/>
+									</div>
 
-										<div className="comment__channel__name-wrapper">
-											<div className="comment__channel__name">
-												{comment.channel.name}
-											</div>
+									<div className="comment__channel__name-wrapper">
+										<div className="comment__channel__name">
+											{comment.channel.name}
 										</div>
 									</div>
-								</Link>
+								</div>
 							</div>
 						</div>
 
