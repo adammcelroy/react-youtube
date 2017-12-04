@@ -14,8 +14,8 @@ describe('<Header />', () => {
 		expect(component).toHaveLength(1);
 	});
 
-	it('should render div with class "header"', () => {
-		expect(component.find('div.header')).toHaveLength(1)
+	it('should render element with class "header"', () => {
+		expect(component.find('.header')).toHaveLength(1)
 	});
 
 	it('should contain link to the homepage', () => {

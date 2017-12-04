@@ -20,8 +20,8 @@ describe('<Home />', () => {
 		expect(component).toHaveLength(1);
 	});
 
-	it('should render div with class "home"', () => {
-		expect(component.find('div.home')).toHaveLength(1);
+	it('should render element with class "home"', () => {
+		expect(component.find('.home')).toHaveLength(1);
 	});
 
 	it('should render VideoList component', () => {
@@ -55,6 +55,7 @@ describe('<Home />', () => {
 		const spy = jest.spyOn(Home.prototype, 'setPageTitle');
 		component = createShallow();
 		expect(spy).toHaveBeenCalled();
-		spy.mockClear();
+		spy.mockReset();
+		spy.mockRestore();
 	});
 });

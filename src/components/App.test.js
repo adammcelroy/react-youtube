@@ -14,8 +14,8 @@ describe('<App />', () => {
 		expect(component).toHaveLength(1);
 	});
 
-	it('should render div with class "app"', () => {
-		expect(component.find('div.app')).toHaveLength(1)
+	it('should render element with class "app"', () => {
+		expect(component.find('.app')).toHaveLength(1)
 	});
 
 	it('should render Header component', () => {

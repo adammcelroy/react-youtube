@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import jsonp from 'jsonp';
 import queryString from 'query-string';
 
-class SearchBar extends Component {
+export class SearchBar extends Component {
 	static propTypes = {
 		autofocus: PropTypes.bool,
 	};
