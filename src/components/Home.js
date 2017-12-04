@@ -31,6 +31,5 @@ export class Home extends Component {
 }
 
 export const mapStateToProps = state => ({videos: state.videos.popular});
-export const mapDispatchToProps = () => ({getVideos});
 
-export default connect(state => mapStateToProps, mapDispatchToProps)(Home);
+export default connect(state => mapStateToProps, {getVideos})(Home);
