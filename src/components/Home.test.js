@@ -48,7 +48,7 @@ describe('<Home />', () => {
 		const spy = jest.fn();
 		component = shallow(<Home {...props} getVideos={spy} />);
 		expect(spy).toHaveBeenCalled();
-		spy.mockClear();
+		spy.mockReset();
 	});
 
 	it('should call setPageTitle on mount', () => {
@@ -56,6 +56,5 @@ describe('<Home />', () => {
 		component = createShallow();
 		expect(spy).toHaveBeenCalled();
 		spy.mockReset();
-		spy.mockRestore();
 	});
 });

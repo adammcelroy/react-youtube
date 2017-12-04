@@ -4,28 +4,23 @@ import { shallow, mount } from 'enzyme';
 import queryString from 'query-string';
 import { SearchBar } from './SearchBar';
 
-let component;
-
 const initialProps = {
 	autofocus: true,
-	location: {
-		search: `?search_query=Example`,
-	},
+	history: {push(){}},
+	location: {search: `?search_query=Example+query`},
 };
 
 const createShallow = props => shallow(<SearchBar {...props} />);
-const createMount = props => mount(<SearchBar {...props} />);
+const createMounted = props => mount(<SearchBar {...props} />);
 
 describe('<SearchBar />', () => {
-	beforeEach(() => {
-		component = createShallow(initialProps);
-	});
-
 	it('should render without crashing', () => {
+		const component = createShallow(initialProps);
 		expect(component).toHaveLength(1);
 	});
 
 	it('should render element with class "search-bar"', () => {
+		const component = createShallow(initialProps);
 		expect(component.find('.search-bar')).toHaveLength(1);
 	});
 
@@ -42,25 +37,39 @@ describe('<SearchBar />', () => {
 	});
 
 	it('should have an element with type "search"', () => {
-		expect(component.find('[type="search"]')).toHaveLength(1);
+		const component = createShallow(initialProps);
+		expect(component.find('input')).toHaveLength(1);
+	});
+
+	it('should pass the autofocus prop into the input element', () => {
+		const component = createShallow(initialProps);
+		expect(component.find('input').props().autoFocus).toBe(initialProps.autofocus);
+	});
+
+	it('should have a working selectiveEncode function', () => {
+		const input = 'Testing & ? = encoding';
+		const expected = 'Testing+%26+%3F+%3D+encoding';
+		const output = SearchBar.prototype.selectiveEncode(input);
+
+		expect(output).toBe(expected);
 	});
 
 	it('should pull a search query fom the location object and populate input', () => {
-		component = createMount(initialProps);
+		const component = createMounted(initialProps);
 
 		const query = queryString.parse(component.props().location.search).search_query;
 
 		expect(component.state().query).toBe(query);
-		expect(component.find('[type="search"]').props().value).toBe(query);
+		expect(component.find('input').props().value).toBe(query);
 	});
 
 	it('should update state and call getSearchSuggestions on input value change', () => {
-		component = createMount(initialProps);
+		const component = createMounted(initialProps);
 
 		const newQuery = 'New query';
 		const spy = jest.spyOn(SearchBar.prototype, 'getSearchSuggestions');
 
-		component.find('[type="search"]').simulate('change', {target: {value: newQuery}});
+		component.find('input').simulate('change', {target: {value: newQuery}});
 
 		expect(component.state().query).toBe(newQuery);
 		expect(spy).toHaveBeenCalledWith(newQuery);
@@ -70,11 +79,11 @@ describe('<SearchBar />', () => {
 	});
 
 	it('should show suggestions on input focus', () => {
-		component = createMount(initialProps);
+		const component = createMounted(initialProps);
 
 		expect(component.state().showSuggestions).toBe(false);
 
-		component.find('[type="search"]').simulate('focus');
+		component.find('input').simulate('focus');
 
 		expect(component.state().showSuggestions).toBe(true);
 	});
@@ -82,14 +91,14 @@ describe('<SearchBar />', () => {
 	it('should hide and clear suggestions on input blur after short delay', () => {
 		jest.useFakeTimers();
 
-		component = createMount(initialProps);
+		const component = createMounted(initialProps);
 
 		component.setState({
 			suggestions: ['Some suggestion'],
 			showSuggestions: true,
 		});
 
-		component.find('[type="search"]').simulate('blur');
+		component.find('input').simulate('blur');
 
 		setTimeout(() => {
 			expect(component.state().showSuggestions).toBe(false);
@@ -97,5 +106,57 @@ describe('<SearchBar />', () => {
 		}, 300);
 
 		jest.runAllTimers();
+	});
+
+	it('should make search on form submit', () => {
+		const component = createMounted(initialProps);
+
+		const event = {preventDefault(){}};
+		const spySearch = jest.spyOn(SearchBar.prototype, 'search');
+		const spyPreventDefault = jest.spyOn(event, 'preventDefault');
+
+		component.find('form').prop('onSubmit')(event);
+
+		expect(spyPreventDefault).toHaveBeenCalled();
+		expect(spySearch).toHaveBeenCalledWith('Example query');
+
+		spySearch.mockReset();
+		spyPreventDefault.mockReset();
+	});
+
+	it('should fetch suggestions from the API and update state on return', async () => {
+		const component = createShallow(initialProps);
+
+		const suggestions = await component.instance().getSearchSuggestions('Query');
+
+		expect(suggestions.length).toBeGreaterThan(0);
+		expect(component.state().suggestions).toEqual(suggestions);
+	});
+
+	it('should show suggestions to the user when criteria met', () => {
+		const component = createMounted(initialProps);
+
+		component.setState({showSuggestions: false, suggestions: []});
+		expect(component.find('.search-bar__suggestions')).toHaveLength(0);
+
+		component.setState({showSuggestions: true, suggestions: []});
+		expect(component.find('.search-bar__suggestions')).toHaveLength(0);
+		
+		component.setState({showSuggestions: false, suggestions: ['Suggestion 1', 'Suggestion 2']});
+		expect(component.find('.search-bar__suggestions')).toHaveLength(0);
+
+		component.setState({showSuggestions: true, uggestions: ['Suggestion 1', 'Suggestion 2']});
+		expect(component.find('.search-bar__suggestions')).toHaveLength(1);
+	});
+
+	it('should show each suggestion to the user', () => {
+		const component = createMounted(initialProps);
+
+		component.setState({
+			showSuggestions: true,
+			suggestions: ['Suggestion 1', 'Suggestion 2', 'Suggestion 3'],
+		});
+
+		expect(component.find('.search-bar__suggestion')).toHaveLength(3);
 	});
 });

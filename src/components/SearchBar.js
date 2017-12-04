@@ -30,21 +30,42 @@ export class SearchBar extends Component {
 	}
 
 	getSearchSuggestions(query) {
-		if (query) {
+		if (!query) {
+			this.setState({suggestions: []});
+			return;
+		}
+
+		return new Promise((resolve, reject) => {
 			jsonp(
 				`http://suggestqueries.google.com/complete/search?ds=yt&client=youtube&q=${query}`,
 				{param: 'jsonp'},
 				(err, data) => {
 					if (!err) {
-						this.setState({
-							suggestions: data[1].map(s => s[0]),
-						});
+						const suggestions = data[1].map(s => s[0]);
+
+						this.setState({suggestions});
+
+						resolve(suggestions);
 					}
+					reject([]);
 				}
 			);
-		} else {
-			this.setState({suggestions: []});
-		}
+		});
+	}
+
+	search(query) {
+		this.props.history.push({
+			pathname: '/results',
+			search: `?search_query=${this.selectiveEncode(query)}`,
+		});
+	}
+
+	selectiveEncode(uri) {
+		return decodeURI(uri)
+			.split(' ').join('+')
+			.split('?').join('%3F')
+			.split('&').join('%26')
+			.split('=').join('%3D');
 	}
 
 	handleSuggestionClick(event) {
@@ -66,10 +87,6 @@ export class SearchBar extends Component {
 	}
 
 	handleBlur() {
-		/*
-		* Delay closing the suggestions to give any click events
-		* time to propagate.
-		* */
 		setTimeout(() => {
 			this.setState({
 				suggestions: [],
@@ -90,24 +107,14 @@ export class SearchBar extends Component {
 		event.preventDefault();
 
 		if (this.state.query) {
-			const query = decodeURI(this.state.query).replace(/ /g, '+');
-
-			this.props.history.push({
-				pathname: '/results',
-				search: `?search_query=${query}`,
-			});
-
+			this.search(this.state.query);
 			this.refs.searchBar.blur();
 		}
 	}
 
 	render() {
 		const { autofocus } = this.props;
-		const {
-			query,
-			showSuggestions,
-			suggestions,
-		} = this.state;
+		const { query, showSuggestions, suggestions } = this.state;
 
 		return (
 			<div role="search" className="search-bar-wrapper">
