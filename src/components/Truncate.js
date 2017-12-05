@@ -18,19 +18,14 @@ class Truncate extends Component {
 	constructor(...args) {
 		super(...args);
 
-		this.state = {
-			expanded: false,
-			truncated: false,
-		};
+		this.state = {expanded: false, truncated: false};
 
 		this.handleTruncate = this.handleTruncate.bind(this);
 		this.toggleLines = this.toggleLines.bind(this);
 	}
 
 	handleTruncate(truncated) {
-		if (this.state.truncated !== truncated) {
-			this.setState({truncated});
-		}
+		this.setState({truncated});
 	}
 
 	toggleLines(event) {
@@ -39,17 +34,8 @@ class Truncate extends Component {
 	}
 
 	render() {
-		const {
-			children,
-			more,
-			less,
-			lines,
-		} = this.props;
-
-		const {
-			expanded,
-			truncated,
-		} = this.state;
+		const { children, more, less, lines } = this.props;
+		const { expanded, truncated } = this.state;
 
 		return (
 			<div>
