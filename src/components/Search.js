@@ -10,14 +10,11 @@ import {
 	scrollToTop,
 } from '../utilities';
 
-class Search extends Component {
+export class Search extends Component {
 	constructor() {
 		super();
 
-		this.state = {
-			query: '',
-			title: '',
-		};
+		this.state = {query: '', title: ''};
 
 		this.getVideos = this.getVideos.bind(this);
 	}
@@ -82,7 +79,7 @@ class Search extends Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
 	return {
 		videos: state.videos.search,
 		nextPageToken: state.videos.current.nextPageToken,
