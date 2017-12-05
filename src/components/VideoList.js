@@ -26,10 +26,7 @@ class VideoList extends Component {
 	}
 
 	renderVideoListing(video) {
-		const {
-			layout,
-			showDescriptions,
-		} = this.props;
+		const { layout, showDescriptions } = this.props;
 
 		const outerColumnClasses = (layout === 'grid')
 			? 'col-lg-3 col-md-4 col-sm-6'
@@ -96,15 +93,15 @@ class VideoList extends Component {
 									<div className="video-listing__stats-wrapper">
 										<div className="video-listing__stats">
 											{video.views &&
-											<div className="video-listing__stats__item">
+											<div className="video-listing__stats__item video-listing__views">
 												{formatNumber(video.views, true)} views
 											</div>
 											}
 
-											{video.createdDate &&
-											<div className="video-listing__stats__item">
+											{video.createdAt &&
+											<div className="video-listing__stats__item video-listing__created-date">
 												<Moment fromNow>
-													{video.createdDate}
+													{video.createdAt}
 												</Moment>
 											</div>
 											}
@@ -136,7 +133,7 @@ class VideoList extends Component {
 			<div className="video-list__videos-wrapper">
 				<div className="video-list__videos">
 					<div className="row">
-						{videos && videos.map(video => this.renderVideoListing(video))}
+						{videos && videos.map(this.renderVideoListing)}
 					</div>
 				</div>
 			</div>
@@ -144,10 +141,7 @@ class VideoList extends Component {
 	}
 
 	render() {
-		const {
-			title,
-			layout,
-		} = this.props;
+		const { title, layout } = this.props;
 
 		return (
 			<section className="video-list-wrapper">
