@@ -10,7 +10,12 @@ class Comments extends Component {
 		totalCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	};
 
-	_renderComment(comment) {
+	constructor() {
+		super();
+		this.renderComment = this.renderComment.bind(this);
+	}
+
+	renderComment(comment) {
 		return (
 			<div className="comment-wrapper" key={comment.id}>
 				<div className="comment">
@@ -78,10 +83,7 @@ class Comments extends Component {
 	}
 
 	render() {
-		const {
-			comments,
-			totalCount,
-		} = this.props;
+		const { comments, totalCount } = this.props;
 
 		return (
 			<section className="comments-wrapper">
@@ -93,8 +95,10 @@ class Comments extends Component {
 						</h1>
 					</div>
 
-					{comments.length > 0 && comments.map(comment => this._renderComment(comment))}
-					{comments.length === 0 && 'There are currently no comments.'}
+					{comments.length > 0
+						? comments.map(this.renderComment)
+						: 'There are currently no comments.'
+					}
 				</div>
 			</section>
 		);
