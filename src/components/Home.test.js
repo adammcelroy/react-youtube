@@ -48,13 +48,13 @@ describe('<Home />', () => {
 		const spy = jest.fn();
 		component = shallow(<Home {...props} getVideos={spy} />);
 		expect(spy).toHaveBeenCalled();
-		spy.mockReset();
+		spy.mockRestore();
 	});
 
 	it('should call setPageTitle on mount', () => {
 		const spy = jest.spyOn(Home.prototype, 'setPageTitle');
 		component = createShallow();
 		expect(spy).toHaveBeenCalled();
-		spy.mockReset();
+		spy.mockRestore();
 	});
 });

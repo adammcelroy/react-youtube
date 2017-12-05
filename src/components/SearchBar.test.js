@@ -6,7 +6,7 @@ import { SearchBar } from './SearchBar';
 
 const initialProps = {
 	autofocus: true,
-	history: {push(){}},
+	history: [],
 	location: {search: `?search_query=Example+query`},
 };
 
@@ -74,7 +74,6 @@ describe('<SearchBar />', () => {
 		expect(component.state().query).toBe(newQuery);
 		expect(spy).toHaveBeenCalledWith(newQuery);
 
-		spy.mockReset();
 		spy.mockRestore();
 	});
 
@@ -120,8 +119,8 @@ describe('<SearchBar />', () => {
 		expect(spyPreventDefault).toHaveBeenCalled();
 		expect(spySearch).toHaveBeenCalledWith('Example query');
 
-		spySearch.mockReset();
-		spyPreventDefault.mockReset();
+		spySearch.mockRestore();
+		spyPreventDefault.mockRestore();
 	});
 
 	it('should fetch suggestions from the API and update state on return', async () => {
@@ -133,7 +132,7 @@ describe('<SearchBar />', () => {
 		expect(component.state().suggestions).toEqual(suggestions);
 	});
 
-	it('should show suggestions to the user when criteria met', () => {
+	it('should show suggestions area to the user when criteria met', () => {
 		const component = createMounted(initialProps);
 
 		component.setState({showSuggestions: false, suggestions: []});
@@ -141,12 +140,30 @@ describe('<SearchBar />', () => {
 
 		component.setState({showSuggestions: true, suggestions: []});
 		expect(component.find('.search-bar__suggestions')).toHaveLength(0);
-		
+
 		component.setState({showSuggestions: false, suggestions: ['Suggestion 1', 'Suggestion 2']});
 		expect(component.find('.search-bar__suggestions')).toHaveLength(0);
 
-		component.setState({showSuggestions: true, uggestions: ['Suggestion 1', 'Suggestion 2']});
+		component.setState({showSuggestions: true, suggestions: ['Suggestion 1', 'Suggestion 2']});
 		expect(component.find('.search-bar__suggestions')).toHaveLength(1);
+	});
+
+	it('should search for suggestion when clicked and set state', () => {
+		const component = createMounted(initialProps);
+		const spy = jest.spyOn(SearchBar.prototype, 'search');
+
+		component.setState({
+			query: 'Suggestion',
+			showSuggestions: true,
+			suggestions: ['Suggestion 1', 'Suggestion 2'],
+		});
+
+		const suggestion = component.find('.search-bar__suggestion').first();
+
+		suggestion.simulate('click');
+
+		expect(component.state().query).toBe(suggestion.text());
+		expect(spy).toHaveBeenCalled();
 	});
 
 	it('should show each suggestion to the user', () => {
@@ -158,5 +175,18 @@ describe('<SearchBar />', () => {
 		});
 
 		expect(component.find('.search-bar__suggestion')).toHaveLength(3);
+	});
+
+	it('should navigate to the search page on search', () => {
+		const component = createMounted(initialProps);
+
+		component.setProps({...initialProps, history: []});
+
+		component.instance().search('Query');
+
+		expect(component.props().history[0]).toEqual({
+			pathname: '/results',
+			search: '?search_query=Query'
+		});
 	});
 });

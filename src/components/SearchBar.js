@@ -72,12 +72,6 @@ export class SearchBar extends Component {
 		const suggestion = event.currentTarget.textContent;
 
 		this.setState({query: suggestion}, () => {
-			/*
-			* Submitting form programatically causes native event
-			* to be fired, not synthetic, and therefore the onSubmit
-			* handler won't fire. A simple workaround here is to
-			* click the submit button instead.
-			* */
 			this.refs.searchSubmit.click();
 		});
 	}
@@ -88,18 +82,13 @@ export class SearchBar extends Component {
 
 	handleBlur() {
 		setTimeout(() => {
-			this.setState({
-				suggestions: [],
-				showSuggestions: false,
-			});
+			this.setState({showSuggestions: false, suggestions: []});
 		}, 300);
 	}
 
 	handleChange(event) {
 		const query = event.target.value;
-
 		this.setState({query});
-
 		this.getSearchSuggestions(query);
 	}
 
@@ -110,6 +99,20 @@ export class SearchBar extends Component {
 			this.search(this.state.query);
 			this.refs.searchBar.blur();
 		}
+	}
+
+	renderSuggestion(suggestion, query) {
+		const suggestionHTML = suggestion.replace(query, `<em>${query}</em>`);
+
+		return (
+			<div key={suggestion} className="search-bar__suggestion-wrapper">
+				<div
+					className="search-bar__suggestion"
+					dangerouslySetInnerHTML={{__html: suggestionHTML}}
+					onClick={this.handleSuggestionClick}
+				></div>
+			</div>
+		);
 	}
 
 	render() {
@@ -155,21 +158,7 @@ export class SearchBar extends Component {
 					{showSuggestions && suggestions && suggestions.length > 0 &&
 						<div className="search-bar__suggestions-wrapper">
 							<div className="search-bar__suggestions">
-								{suggestions.map((suggestion) => {
-									const suggestionHTML = suggestion.replace(query, `<em>${query}</em>`);
-
-									return (
-										<div key={suggestion} className="search-bar__suggestion-wrapper">
-											<div
-												className="search-bar__suggestion"
-												dangerouslySetInnerHTML={{
-													__html: suggestionHTML,
-												}}
-												onClick={this.handleSuggestionClick}
-											></div>
-										</div>
-									);
-								})}
+								{suggestions.map(s => this.renderSuggestion(s, query))}
 							</div>
 						</div>
 					}
