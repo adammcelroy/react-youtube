@@ -28,6 +28,10 @@ class VideoList extends Component {
 	renderVideoListing(video) {
 		const { layout, showDescriptions } = this.props;
 
+		if (layout === 'sidebar') {
+			video.createdAt = null;
+		}
+
 		const outerColumnClasses = (layout === 'grid')
 			? 'col-lg-3 col-md-4 col-sm-6'
 			: 'col-12';
