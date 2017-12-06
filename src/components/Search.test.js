@@ -15,12 +15,12 @@ const createMounted = props => mount(<Search {...props} />);
 describe('<Search />', () => {
 	it('should render without crashing', () => {
 		const component = createShallow(initialProps);
-		expect(component).toHaveLength(1);
+		expect(component.length).toBe(1);
 	});
 
 	it('should render element with class "search"', () => {
 		const component = createShallow(initialProps);
-		expect(component.find('.search')).toHaveLength(1);
+		expect(component.find('.search').length).toBe(1);
 	});
 
 	it('should pull a search query fom the location object and perform search', () => {
@@ -66,7 +66,7 @@ describe('<Search />', () => {
 		const thisProps = mapStateToProps(state);
 
 		expect(thisProps.videos).toBeInstanceOf(Array);
-		expect(thisProps.videos).toHaveLength(1);
+		expect(thisProps.videos.length).toBe(1);
 		expect(thisProps.totalResults).toBe(1);
 		expect(thisProps.nextPageToken).toBe('Example token');
 	});

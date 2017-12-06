@@ -15,7 +15,7 @@ const createMounted = props => mount(<Truncate {...props} />);
 describe('<Truncate />', () => {
 	it('should render without crashing', () => {
 		const component = createMounted(initialProps);
-		expect(component).toHaveLength(1);
+		expect(component.length).toBe(1);
 	});
 
 	it('should show children', () => {
@@ -25,7 +25,7 @@ describe('<Truncate />', () => {
 
 	it('should contain a "Show more" link', () => {
 		const component = createMounted(initialProps);
-		expect(component.find('.truncate-trigger')).toHaveLength(1);
+		expect(component.find('.truncate-trigger').length).toBe(1);
 		expect(component.find('.truncate-trigger').text()).toBe(initialProps.more);
 	});
 
@@ -35,13 +35,13 @@ describe('<Truncate />', () => {
 		component.find('.truncate-trigger').simulate('click');
 
 		expect(component.state().expanded).toBe(true);
-		expect(component.find('.truncate-trigger')).toHaveLength(2);
+		expect(component.find('.truncate-trigger').length).toBe(2);
 		expect(component.find('.truncate-trigger').last().text()).toBe(initialProps.less);
 	});
 
 	it('should just show "..." instead of "Show more" link if more prop set to "..."', () => {
 		const component = createMounted({...initialProps, more: '...'});
-		expect(component.find('.truncate-trigger')).toHaveLength(0);
+		expect(component.find('.truncate-trigger').length).toBe(0);
 		expect(component.find('span').last().text()).toBe('…');
 	})
 });

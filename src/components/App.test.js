@@ -11,19 +11,19 @@ describe('<App />', () => {
 	});
 
 	it('should render without crashing', () => {
-		expect(component).toHaveLength(1);
+		expect(component.length).toBe(1);
 	});
 
 	it('should render element with class "app"', () => {
-		expect(component.find('.app')).toHaveLength(1)
+		expect(component.find('.app').length).toBe(1)
 	});
 
 	it('should render Header component', () => {
-		expect(component.find(Header)).toHaveLength(1);
+		expect(component.find(Header).length).toBe(1);
 	});
 
 	it('should render children', () => {
 		const component = shallow(<App><div className="child" /></App>);
-		expect(component.find('div.child')).toHaveLength(1);
+		expect(component.find('div.child').length).toBe(1);
 	});
 });

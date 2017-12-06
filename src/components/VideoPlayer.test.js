@@ -13,19 +13,19 @@ const createShallow = props => shallow(<VideoPlayer {...props} />);
 describe('<VideoPlayer />', () => {
 	it('should render without crashing', () => {
 		const component = createShallow(initialProps);
-		expect(component).toHaveLength(1);
+		expect(component.length).toBe(1);
 	});
 
 	it('should render element with class "video-player"', () => {
 		const component = createShallow(initialProps);
-		expect(component.find('.video-player')).toHaveLength(1);
+		expect(component.find('.video-player').length).toBe(1);
 	});
 
 	it('should render an iframe with a src containing the YouTube domain', () => {
 		const component = createShallow(initialProps);
 		const domain = 'https://www.youtube.com/embed/';
 
-		expect(component.find('iframe')).toHaveLength(1);
+		expect(component.find('iframe').length).toBe(1);
 		expect(component.find('iframe').props().src.startsWith(domain)).toBe(true);
 	});
 

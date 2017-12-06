@@ -71,7 +71,7 @@ export const standardiseChannelData = (channel) => {
 		id: channel.id,
 		name: channel.snippet.title,
 		description: channel.snippet.description,
-		createdDate: channel.snippet.publishedAt,
+		createdAt: channel.snippet.publishedAt,
 		country: channel.snippet.country,
 		viewCount: channel.statistics.viewCount,
 		videoCount: channel.statistics.videoCount,

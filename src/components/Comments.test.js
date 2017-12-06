@@ -36,17 +36,17 @@ const createShallow = props => shallow(<Comments {...props} />);
 describe('<Comments />', () => {
 	it('should render without crashing', () => {
 		const component = createShallow(initialProps);
-		expect(component).toHaveLength(1);
+		expect(component.length).toBe(1);
 	});
 
 	it('should render element with class "search-bar"', () => {
 		const component = createShallow(initialProps);
-		expect(component.find('.comments')).toHaveLength(1);
+		expect(component.find('.comments').length).toBe(1);
 	});
 
 	it('should render each comment passed in as props', () => {
 		const component = createShallow(initialProps);
-		expect(component.find('.comment')).toHaveLength(2);
+		expect(component.find('.comment').length).toBe(2);
 	});
 
 	it('should show channel info correctly', () => {
@@ -55,7 +55,7 @@ describe('<Comments />', () => {
 		const channelAvatar = channel.find('img.comment__channel__avatar');
 		const props = initialProps.comments[0];
 
-		expect(channelAvatar).toHaveLength(1);
+		expect(channelAvatar.length).toBe(1);
 		expect(channelAvatar.props().src).toBe(props.channel.avatar);
 		expect(channelAvatar.props().alt).toBe(props.channel.name);
 	});
@@ -68,13 +68,13 @@ describe('<Comments />', () => {
 		const commentLikeCount = commentDetails.find('.comment__like-count');
 		const props = initialProps.comments[0];
 
-		expect(commentDetails).toHaveLength(1);
+		expect(commentDetails.length).toBe(1);
 
-		expect(commentCreatedDate).toHaveLength(1);
+		expect(commentCreatedDate.length).toBe(1);
 		expect(commentCreatedDate.find('t').props().fromNow).toBe(true);
 		expect(commentCreatedDate.find('t').props().children).toBe(props.createdAt);
 
-		expect(commentLikeCount).toHaveLength(1);
+		expect(commentLikeCount.length).toBe(1);
 		expect(commentLikeCount.text()).toBe(formatNumber(props.likeCount, true));
 	});
 
@@ -84,8 +84,8 @@ describe('<Comments />', () => {
 		const commentBody = comment.find('.comment__body');
 		const props = initialProps.comments[0];
 
-		expect(commentBody).toHaveLength(1);
-		expect(commentBody.find('Truncate')).toHaveLength(1);
+		expect(commentBody.length).toBe(1);
+		expect(commentBody.find('Truncate').length).toBe(1);
 		expect(commentBody.find('Truncate').props().children).toBe(props.text);
 	});
 

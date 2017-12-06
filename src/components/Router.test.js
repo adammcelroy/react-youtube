@@ -14,7 +14,7 @@ describe('<Router />', () => {
 	});
 
 	it('should render without crashing', () => {
-		expect(component).toHaveLength(1);
+		expect(component.length).toBe(1);
 	});
 
 	it('should match all routes to components', () => {
@@ -44,7 +44,7 @@ describe('<Router />', () => {
 	it('should redirect unmatched requests to the homepage', () => {
 		const redirect = component.find(Redirect);
 
-		expect(redirect).toHaveLength(1);
+		expect(redirect.length).toBe(1);
 		expect(redirect.props().to).toBe('/');
 	});
 });

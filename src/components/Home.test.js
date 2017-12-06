@@ -17,20 +17,20 @@ describe('<Home />', () => {
 	beforeEach(createShallow);
 
 	it('should render without crashing', () => {
-		expect(component).toHaveLength(1);
+		expect(component.length).toBe(1);
 	});
 
 	it('should render element with class "home"', () => {
-		expect(component.find('.home')).toHaveLength(1);
+		expect(component.find('.home').length).toBe(1);
 	});
 
 	it('should render VideoList component', () => {
-		expect(component.find(VideoList)).toHaveLength(1);
+		expect(component.find(VideoList).length).toBe(1);
 	});
 
 	it('should pass VideoList component prop of videos', () => {
 		const thisProps = {videos: props.videos};
-		expect(component.find(VideoList).find(thisProps)).toHaveLength(1);
+		expect(component.find(VideoList).find(thisProps).length).toBe(1);
 	});
 
 	it('should map state to props correctly', () => {
@@ -41,7 +41,7 @@ describe('<Home />', () => {
 		};
 		const thisProps = mapStateToProps(state);
 		expect(thisProps.videos).toBeInstanceOf(Array);
-		expect(thisProps.videos).toHaveLength(0);
+		expect(thisProps.videos.length).toBe(0);
 	});
 
 	it('should call getVideos on mount', () => {

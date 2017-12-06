@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { shallow, mount } from 'enzyme';
 import queryString from 'query-string';
 import { SearchBar } from './SearchBar';
@@ -16,29 +15,17 @@ const createMounted = props => mount(<SearchBar {...props} />);
 describe('<SearchBar />', () => {
 	it('should render without crashing', () => {
 		const component = createShallow(initialProps);
-		expect(component).toHaveLength(1);
+		expect(component.length).toBe(1);
 	});
 
 	it('should render element with class "search-bar"', () => {
 		const component = createShallow(initialProps);
-		expect(component.find('.search-bar')).toHaveLength(1);
-	});
-
-	it('should have expected propTypes', () => {
-		expect(SearchBar.propTypes).toMatchObject({
-			autofocus: PropTypes.bool,
-		});
-	});
-
-	it('should have expected defaultProps', () => {
-		expect(SearchBar.defaultProps).toMatchObject({
-			autofocus: false,
-		});
+		expect(component.find('.search-bar').length).toBe(1);
 	});
 
 	it('should have an element with type "search"', () => {
 		const component = createShallow(initialProps);
-		expect(component.find('input')).toHaveLength(1);
+		expect(component.find('input').length).toBe(1);
 	});
 
 	it('should pass the autofocus prop into the input element', () => {
@@ -101,7 +88,7 @@ describe('<SearchBar />', () => {
 
 		setTimeout(() => {
 			expect(component.state().showSuggestions).toBe(false);
-			expect(component.state().suggestions).toHaveLength(0);
+			expect(component.state().suggestions.length).toBe(0);
 		}, 300);
 
 		jest.runAllTimers();
@@ -136,16 +123,16 @@ describe('<SearchBar />', () => {
 		const component = createMounted(initialProps);
 
 		component.setState({showSuggestions: false, suggestions: []});
-		expect(component.find('.search-bar__suggestions')).toHaveLength(0);
+		expect(component.find('.search-bar__suggestions').length).toBe(0);
 
 		component.setState({showSuggestions: true, suggestions: []});
-		expect(component.find('.search-bar__suggestions')).toHaveLength(0);
+		expect(component.find('.search-bar__suggestions').length).toBe(0);
 
 		component.setState({showSuggestions: false, suggestions: ['Suggestion 1', 'Suggestion 2']});
-		expect(component.find('.search-bar__suggestions')).toHaveLength(0);
+		expect(component.find('.search-bar__suggestions').length).toBe(0);
 
 		component.setState({showSuggestions: true, suggestions: ['Suggestion 1', 'Suggestion 2']});
-		expect(component.find('.search-bar__suggestions')).toHaveLength(1);
+		expect(component.find('.search-bar__suggestions').length).toBe(1);
 	});
 
 	it('should search for suggestion when clicked and set state', () => {
@@ -174,7 +161,7 @@ describe('<SearchBar />', () => {
 			suggestions: ['Suggestion 1', 'Suggestion 2', 'Suggestion 3'],
 		});
 
-		expect(component.find('.search-bar__suggestion')).toHaveLength(3);
+		expect(component.find('.search-bar__suggestion').length).toBe(3);
 	});
 
 	it('should navigate to the search page on search', () => {
