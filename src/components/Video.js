@@ -18,7 +18,7 @@ import {
 	formatNumber,
 } from '../utilities';
 
-class Video extends Component {
+export class Video extends Component {
 	constructor() {
 		super();
 		this.state = {id: ''};
@@ -40,23 +40,13 @@ class Video extends Component {
 	}
 
 	getVideo(id) {
-		const {
-			getVideo,
-			getVideos,
-			getChannel,
-			getComments,
-		} = this.props;
-
 		this.setState({id});
 
-		getVideo(id).then(() => {
+		this.props.getVideo(id).then(() => {
 			setPageTitle(this.props.video.title);
-			getChannel(this.props.video.channel.id);
-			getComments(id);
-			getVideos({
-				type: 'related',
-				videoId: id,
-			});
+			this.props.getChannel(this.props.video.channel.id);
+			this.props.getComments(id);
+			this.props.getVideos({type: 'related', videoId: id});
 		});
 	}
 
@@ -82,18 +72,24 @@ class Video extends Component {
 									<div className="video__stats">
 										<div className="row">
 											<div className="col-6 text-left">
-												{formatNumber(video.views)} views
+												<div className="video__views">
+													{formatNumber(video.views)} views
+												</div>
 											</div>
 
 											<div className="col-6">
 												<div className="video__stats__item">
-													<i className="fa fa-thumbs-up"></i>
-													{formatNumber(video.likes, true)}
+													<div className="video__like-count">
+														<i className="fa fa-thumbs-up"></i>
+														{formatNumber(video.likes, true)}
+													</div>
 												</div>
 
 												<div className="video__stats__item">
-													<i className="fa fa-thumbs-down"></i>
-													{formatNumber(video.dislikes, true)}
+													<div className="video__dislike-count">
+														<i className="fa fa-thumbs-down"></i>
+														{formatNumber(video.dislikes, true)}
+													</div>
 												</div>
 											</div>
 										</div>
@@ -168,12 +164,10 @@ class Video extends Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		video: state.video,
-		channel: state.channel,
-	};
-};
+export const mapStateToProps = (state) => ({
+	video: state.video,
+	channel: state.channel,
+});
 
 export default connect(mapStateToProps, {
 	getVideo,
