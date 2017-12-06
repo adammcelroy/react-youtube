@@ -37,7 +37,7 @@ export class SearchBar extends Component {
 
 		return new Promise((resolve, reject) => {
 			jsonp(
-				`http://suggestqueries.google.com/complete/search?ds=yt&client=youtube&q=${query}`,
+				`https://suggestqueries.google.com/complete/search?ds=yt&client=youtube&q=${query}`,
 				{param: 'jsonp'},
 				(err, data) => {
 					if (!err) {
