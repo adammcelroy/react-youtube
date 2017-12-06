@@ -9,7 +9,7 @@ class VideoPlayer extends Component {
 	};
 
 	static defaultProps = {
-		autoplay: process.ENV === 'production',
+		autoplay: process.env.NODE_ENV === 'production',
 		showRelated: false,
 	};
 
